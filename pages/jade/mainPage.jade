@@ -1,0 +1,43 @@
+﻿!!! 5
+html(lang='en')
+  include includes/head
+
+  body  
+
+    div(style='position: relative; width: 100%; height: 60px; background-position: 0 0; background-color: #252525;').global-nav
+      div.b-locator__my-location
+            div#LocatorForm.b-locator__my-location__form
+              form(action='',method='get').b-search-form
+                div.b-form-field
+                  input(type='text',name='address',value='',data-placeholder='Уточните свой адрес',required).b-input-text
+                div.b-form-submit
+                  input(type="button",value="Найти").b-button.b-button_type-submit.b-button_theme-1-M-find.i-button-active
+            div.i-clearfix
+
+    div.i-page-content
+
+      div#Locator.b-locator
+  
+        div.b-locator__service
+          
+          div.b-locator__map
+            div.b-locator__map__more
+              a(href="#").b-button.b-locator__map__more__button.b-button_theme-1-S-more
+            div(style="width: 100%; height: 600px;")#LocatorMap
+            //div.i-decor-block-shadow
+      //  
+        div.b-locator__result
+          div.b-locator__result__tabs b-tabs
+            div#tab-locator-result.b-tabs__item.b-tabs__item__type-active
+              span.b-tabs__item__text
+                Врачи поблизости
+            div.i-clearfix
+          div.b-locator__result__content
+            div#block-locator-result
+              div.b-get-more
+                a(href="")
+                  Показать еще
+
+      div.i-clearfix
+
+      include includes/footer
