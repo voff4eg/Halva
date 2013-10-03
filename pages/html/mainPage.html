@@ -28,29 +28,58 @@
   		</div>
 	  </div><!-- /navbar-inner -->
 	</div>
-  <link rel="stylesheet" href="/js/leaflet/leaflet.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="/js/leaflet.css" />
   <!--[if lte IE 8]>
     <link rel="stylesheet" href="/js/leaflet/leaflet.ie.css" />
   <![endif]-->
-  <script src="/js/leaflet/leaflet.js"></script>
-  <script>
-    // create a map in the "map" div, set the view to a given place and zoom
-    var map = L.map('map').setView([51.505, -0.09], 13);
+  <script src="/js/leaflet.js"></script>  
+  
+  <div class="container">
+   <!-- Main hero unit for a primary marketing message or call to action -->
+    <div id="map"></div>
+    <script type='text/javascript'>
+      // create a map in the "map" div, set the view to a given place and zoom
+      var map = L.map('map').setView([55.7522,37.6156], 15);
 
-    // add an OpenStreetMap tile layer
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+      // add an OpenStreetMap tile layer
+      // L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+      //     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      // }).addTo(map);
 
-    // add a marker in the given location, attach some popup content to it and open the popup
-    L.marker([51.5, -0.09]).addTo(map)
-        .bindPopup('A pretty CSS3 popup. <br> Easily customizable.')
-        .openPopup();
-  </script>
-  <div id="map"></div>
-    <!--<div class="container">-->
-      <!-- Main hero unit for a primary marketing message or call to action -->
-	  <!--<div id="LocatorMap"></div>-->
-    
+      var geoJsonData = {
+        "type": "FeatureCollection", 
+        "features": [
+          { "type": "Feature", "id":"1", "properties": { "address": "2"   }, "geometry": { "type": "Point", "coordinates": [55.789608,37.752481] } },
+          { "type": "Feature", "id":"2", "properties": { "address": "151" }, "geometry": { "type": "Point", "coordinates": [55.775616,37.584748] } },
+          { "type": "Feature", "id":"3", "properties": { "address": "21"  }, "geometry": { "type": "Point", "coordinates": [55.679560,37.758626] } },
+          { "type": "Feature", "id":"4", "properties": { "address": "14"  }, "geometry": { "type": "Point", "coordinates": [55.740750,37.657628] } },
+          { "type": "Feature", "id":"5", "properties": { "address": "38B" }, "geometry": { "type": "Point", "coordinates": [55.733285,37.644234] } },
+          { "type": "Feature", "id":"6", "properties": { "address": "38"  }, "geometry": { "type": "Point", "coordinates": [55.751310,37.584613] } }
+        ]
+      };
 
-    <!--</div>--> <!-- /container -->
+      var cloudmade = L.tileLayer('http://{s}.tile.cloudmade.com/{key}/997/256/{z}/{x}/{y}.png', {
+        maxZoom: 15,
+        attribution: 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
+        key: 'BC9A493B41014CAABB98F0471D759707'
+      });
+
+      // var map = L.map('map')
+      //     .addLayer(cloudmade);
+      map.addLayer(cloudmade);
+
+      var markers = L.markerClusterGroup();
+
+      var geoJsonLayer = L.geoJson(geoJsonData, {
+        onEachFeature: function (feature, layer) {
+          layer.bindPopup(feature.properties.address);
+        }
+      });
+      markers.addLayer(geoJsonLayer);
+
+      map.addLayer(markers);
+      map.fitBounds(markers.getBounds());
+    </script>
+
+  </div> <!-- /container -->

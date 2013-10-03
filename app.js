@@ -61,89 +61,12 @@ app.use(connect.session({ secret: 'your secret here'} ));
 //--- routing
 
 //---
-app.use(connect.favicon()) ;
-app.use(connect.static( path.join(__dirname, 'static')) ) ; //note, we give static files to everyone without any check
+//app.use(connect.favicon()) ;
+//app.use(connect.static( path.join(__dirname, 'static')) ) ; //note, we give static files to everyone without any check
 
-/*//---
-var siteUrls = [
-  {pattern:'^/login/?$', restricted: false}
-, {pattern:'^/logout/?$', restricted: true}
-, {pattern:'^/geolocation/?$', restricted: false}
-, {pattern:'^/mongo/?$', restricted: false}
-, {pattern:'^/insert/?$', restricted: false}
-, {pattern:'^/$', restricted: false}
-, {pattern:'^/single/\\w+/?$', restricted: true}
-];*/
-
-/*function authorizeUrls(urls) {
-  function authorize(req, res, next) {
-    var requestedUrl = url.parse(req.url).pathname;
-    for (var ui in urls) {
-      var pattern = urls[ui].pattern;
-      var restricted = urls[ui].restricted;
-      if (requestedUrl.match(pattern)) {
-        if (restricted) {
-          if (req.session.authorized) {
-            next();
-            return;
-          }
-          else{
-            req.session.redirectedFrom = requestedUrl;
-            res.writeHead(303, {'Location': '/login'});
-            res.end();
-            return;
-          }
-        }
-        else {
-          next();
-          return;
-        }
-      }
-    }
-
-    // we get here only if requested url is wrong
-    console.log('common 404 for ', req.url);
-    res.end('404: there is no ' + req.url + ' here');
-  }
-  return authorize ;
-}
-
-
-app.use('/', authorizeUrls(siteUrls));*/
-
-/*function print_visits(request, response){
-	require('mongodb').connect(mongourl, function(err, conn){
-		conn.collection('items', function(err, coll){
-			coll.find({}, {sort:[['_id','desc']]}, function(err, cursor){
-				cursor.toArray(function(err, items){										
-					var html = "<script>var doctorsJSON = [";
-					for(i=0; i<items.length;i++){							
-						 //html += JSON.stringify(items[i]) + "\n";
-						 //console.log(items[i]);
-						 html += '{"name":' + JSON.stringify(items[i].name) + ',' + '"address":' + JSON.stringify(items[i].address) + ',' + '"href":"","pic":"\/images\/wifi.png","coord":[' + JSON.stringify(items[i].cx) + ',' + JSON.stringify(items[i].cy) + ']}';
-						 if(i != items.length -1){
-							html += ',';
-						 }
-					}
-					html += ']</script>';
-					for (var key in request.body) {
-					  var val = request.body[key];
-					  //document.write(key+' = '+val);
-					  console.log("REQUEST " + key+" = "+val);
-					}				
-					//if(request.body.address.length > 0){
-						page += "<script>var query='" + request.body.address + "'</script>";
-					//}
-					page += html;
-					page += pagehtml;
-					response.writeHead(200, {"Content-Type": "text/html"});
-					response.write(page);
-					response.end();				 		
-				});
-			});
-		});
-	});
-}*/
+app.use('/img',express.static(path.join(__dirname, 'static/images')));
+app.use('/js',express.static(path.join(__dirname, 'static/js')));
+app.use('/css',express.static(path.join(__dirname, 'static/css')));
 
 //--- finally
 var mainPageGen = require('./pages/mainPage.js');
