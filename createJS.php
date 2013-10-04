@@ -9,20 +9,22 @@ $collection = $db->items;
 $cursor = $collection->find();
 $WiFi = array();
 foreach ($cursor as $obj) {
-  $ar = array(
-		"name" => $obj['name'],
-		"address" => $obj['address'],
-		"href" => "",
-		"pic" => "/images/wifi.png",
-		"coord" => array($obj['cx'],$obj['cy'])
-	);
-  $WiFi[] = $ar;
+ //  $ar = array(
+	// 	"name" => $obj['name'],
+	// 	"address" => $obj['address'],
+	// 	"href" => "",
+	// 	"pic" => "/images/wifi.png",
+	// 	"coord" => array($obj['cx'],$obj['cy'])
+	// );
+ 	$ar = array($obj['cx'], $obj['cy'], '"'.stripcslashes($obj['name'].' '.$obj['address']).'"');	
+ 	$WiFi[] = $ar;
 }
 // disconnect from server
 $mongo->close();
  
 if(!empty($WiFi)){
-	$Content = "var doctorsJSON = ".json_encode($WiFi).";";
+	//$Content = "var doctorsJSON = ".json_encode($WiFi).";";
+	$Content = "var addressPoints = ".json_encode($WiFi).";";
 	$filename = "doctorsJSON.js";
 
 	// Вначале давайте убедимся, что файл существует и доступен для записи.
