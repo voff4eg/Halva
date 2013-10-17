@@ -1,5 +1,7 @@
 var fs = require('fs');
 var path = require('path');
+var cache = require('memory-cache');
+var pagehtml = "";
 
 function create(request, response, mongourl) {
 
@@ -11,11 +13,13 @@ function create(request, response, mongourl) {
         coll.find({}, {sort:[['_id','desc']]}, function(err, cursor){
           cursor.toArray(function(err, items){
             for(i=0; i<items.length;i++){
-              var addressArray = new Array();
-              addressArray[0] = items[i].cx;
-              addressArray[1] = items[i].cy;
-              addressArray[2] = items[i].name + " " + items[i].address;
-              pagehtml += JSON.stringify(addressArray) + ",";
+              if(items[i].cx != null && items[i].cy != null && (items[i].name + " " + items[i].address) != null){
+                var addressArray = new Array();
+                addressArray[0] = items[i].cx;
+                addressArray[1] = items[i].cy;
+                addressArray[2] = items[i].name + " " + items[i].address;
+                pagehtml += JSON.stringify(addressArray) + ",";
+              }              
             }
             console.log(pagehtml);            
             pagehtml = pagehtml.substring(0,pagehtml.length-1);
@@ -28,10 +32,9 @@ function create(request, response, mongourl) {
         });
       });
     });
-  }
-  var cache = require('memory-cache');
+  }  
   if(cache.get('wifi') == null){
-    var pagehtml = "var addressPoints = [";
+    pagehtml = "var addressPoints = [";
     print_visits(request, response, mongourl);
     cache.put('wifi', pagehtml);
   }else{
