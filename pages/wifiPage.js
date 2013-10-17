@@ -1,10 +1,8 @@
 var fs = require('fs');
 var path = require('path');
-var pagehtml = "var addressPoints = [";
-
-var html = "";
 
 function create(request, response, mongourl) {
+
   function print_visits(request, response, mongourl){
     /* Connect to the DB and auth */
     console.log(mongourl);
@@ -21,7 +19,7 @@ function create(request, response, mongourl) {
             }
             console.log(pagehtml);            
             pagehtml = pagehtml.substring(0,pagehtml.length-1);
-            pagehtml += "]";
+            pagehtml += "]";            
             console.log(pagehtml);
             response.writeHead(200, {"Content-Type": "application/javascript"});
             response.write(pagehtml);
@@ -31,8 +29,28 @@ function create(request, response, mongourl) {
       });
     });
   }
-  print_visits(request, response, mongourl);
+  var cache = require('memory-cache');
+  if(cache.get('wifi') == null){
+    var pagehtml = "var addressPoints = [";
+    print_visits(request, response, mongourl);
+    cache.put('wifi', pagehtml);
+  }else{
+    console.log("not null");
+    response.writeHead(200, {"Content-Type": "application/javascript"});
+    response.write(pagehtml);
+    response.end();    
+  }  
 }
+
+
+// that wasn't too interesting, here's the good part
+
+cache.put('houdini', 'disapear', 100) // Time in ms
+console.log('Houdini will now ' + cache.get('houdini'));
+
+setTimeout(function() {
+  console.log('Houdini is ' + cache.get('houdini'));
+}, 200);
 
 //---
 exports.create = create ;
