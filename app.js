@@ -1,8 +1,8 @@
 var path = require('path') ;
 var url = require('url');
 var http = require('http');
-var port = (process.env.VMC_APP_PORT || 8000);
-//var port = (process.env.VMC_APP_PORT || 1337);
+//var port = (process.env.VMC_APP_PORT || 8000);
+var port = (process.env.VMC_APP_PORT || 1337);
 var host = (process.env.VCAP_APP_HOST || 'localhost');
 var fs = require('fs');
 var header = require('fs').readFileSync(path.join(__dirname , 'pages/html', 'includes/header.html' ), 'utf8');

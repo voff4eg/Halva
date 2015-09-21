@@ -1,5 +1,4 @@
 ﻿<div id="map"></div>
-<span>Mouse over a cluster to see the bounds of its children and click a cluster to zoom to those bounds</span>
 <script type="text/javascript">
 $(document).ready(function() {
   initMap();
@@ -11,12 +10,13 @@ function initMap(){
     type: 'get',
     success: function(response){
       if(response){
-        var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
+        /*var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
           cloudmadeAttribution = 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade, Points &copy 2012 LINZ',
           cloudmade = L.tileLayer(cloudmadeUrl, {maxZoom: 17, attribution: cloudmadeAttribution}),
+          yndx = new L.Yandex(),
           latlng = L.latLng(55.7522, 37.6156);
 
-        var map = L.map('map', {center: latlng, zoom: 13, layers: [cloudmade]});
+        var map = L.map('map', {center: latlng, zoom: 13, layers: [cloudmadeUrl]});
 
         var markers = L.markerClusterGroup();
         
@@ -26,9 +26,29 @@ function initMap(){
           var marker = L.marker(new L.LatLng(a[0], a[1]), { title: title });
           marker.bindPopup(title);
           markers.addLayer(marker);
+        }*/
+
+        //map.addLayer(markers);
+        var map = new L.Map('map', {center: new L.LatLng(55.7522, 37.6156), zoom:17, zoomAnimation: false });
+        var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+        var yndx = new L.Yandex();
+        var googleLayer = new L.Google('ROADMAP');
+        var mainMap = new L.TileLayer('http://velios.myjino.ru/maptiles/main/{z}/{x}/{y}.jpg');
+        var universiadaMap  = new L.TileLayer('http://velios.myjino.ru/maptiles/universiada/{z}/{x}/{y}.jpg');
+
+        for (var i = 0; i < addressPoints.length; i++) {
+          var a = addressPoints[i];
+          var title = a[2];
+          var marker = L.marker(new L.LatLng(a[0], a[1]), { title: title });
+          marker.bindPopup(title);
+          //markers.addLayer(marker);
+          map.addLayer(marker);
         }
 
-        map.addLayer(markers);       
+        map.addLayer(yndx);
+
+        map.addControl(new L.Control.Layers({"Yandex":yndx, 'OSM':osm,  "Google":googleLayer, "Основной чертеж":mainMap, "Универсиада":universiadaMap}));
+
       }
     }
   });

@@ -1,4 +1,5 @@
-<?header("Content-Type: text/html; charset=UTF-8");
+<?php
+header("Content-Type: text/html; charset=UTF-8");
 ini_set('memory_limit', '6024M');
 
 set_time_limit(0);
@@ -27,6 +28,8 @@ if(!empty($WiFi)){
 	$Content = "var addressPoints = ".json_encode($WiFi).";";
 	$filename = "doctorsJSON.js";
 
+	echo $Content;die;
+
 	// Вначале давайте убедимся, что файл существует и доступен для записи.
 	if (is_writable($filename)) {
 
@@ -51,5 +54,7 @@ if(!empty($WiFi)){
 	} else {
 		echo "Файл $filename недоступен для записи";
 	}	
+}else{
+	echo "empty";
 }
 ?>

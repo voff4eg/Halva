@@ -48,7 +48,7 @@ function create(request, response, mongourl) {
 
 // that wasn't too interesting, here's the good part
 
-cache.put('houdini', 'disapear', 100) // Time in ms
+cache.put('houdini', 'disapear', 0) // Time in ms
 console.log('Houdini will now ' + cache.get('houdini'));
 
 setTimeout(function() {

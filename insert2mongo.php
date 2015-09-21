@@ -1,4 +1,4 @@
-<?
+<?php
 header("Content-Type: text/html; charset=UTF-8");
 ini_set('memory_limit', '6024M');
 
@@ -75,7 +75,7 @@ foreach($arAddresses as $key => $Adresses){
   }
 }
 
-echo "<pre>";print_r($All);echo "</pre>";
+//echo "<pre>";print_r($All);echo "</pre>";die;
 if(!empty($All)){
 
 $mongo = new Mongo(); // соединяемся с сервером
