@@ -1,32 +1,48 @@
-var fs = require('fs');
-var jade = require('jade');
-
-var path = require('path');
-//var jadePath = path.join(__dirname , 'jade', 'mainPage.jade' );
-var header = require('fs').readFileSync(path.join(__dirname , 'html', 'includes/header.html' ), 'utf8');
-var pagehtml = require('fs').readFileSync(path.join(__dirname , 'html', 'mainPage.html' ), 'utf8');
-var footer = require('fs').readFileSync(path.join(__dirname , 'html', 'includes/footer.html' ), 'utf8');
-//var str = require('fs').readFileSync(pagehtml, 'utf8') ;
-//var fn = jade.compile(str, { filename: jadePath, pretty: true });
+var fs = require('fs'),
+jade = require('jade'),
+path = require('path'),
+jadePath = path.join(__dirname , 'jade', 'mainPage.jade'),
+str = fs.readFileSync(jadePath, 'utf8'),
+addressObject = [];
 
 var baseLocals = {currentPage:'/'};
 
-//---
-function create(request, response) {
-  var locals = baseLocals ;
-  locals.loggedIn = request.session.authorized ? request.session.authorized : false;
-  locals.username = request.session.username ? request.session.username : 'no matter what';
-//  console.log('at main: ', request.session.authorized, request.session.username);
+function create(request, response, mongourl) {
 
-  //var page = fn(locals);
-  var page = header;
-  page += pagehtml;
-  page += footer;
+    require('mongodb').connect(mongourl, function(err, conn){
+        conn.collection('items', function(err, coll){
+            coll.find({}, {sort:[['_id','desc']]}, function(err, cursor){
+                cursor.toArray(function(err, items){
+                    for(i=0; i<items.length;i++){
+                        if(items[i].cx != null && items[i].cy != null && (items[i].name + " " + items[i].address) != null){
+                            addressObject[i] = {
+                                'cx' : items[i].cx,
+                                'cy' : items[i].cy,
+                                'name' : items[i].name + ' ' + items[i].address
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    });
 
-  response.writeHead(200, {"Content-Type": "text/html"});
-  response.write(page);
-  response.end();
+    var locals = baseLocals ;
+    locals.loggedIn = request.session.authorized ? request.session.authorized : false;
+    locals.username = request.session.username ? request.session.username : 'no matter what';
+
+    //var page = fn({address: addressObject, d: 'a'});
+    //var fn = jade.compile(str, { filename: jadePath, pretty: true})
+    //fn.call({address : {'val' : 'This is a Test', 'asdasd' : 'asdfsad'}}, addressObject);
+    //var page = fn({}});
+   /* console.log(addressObject.cx);
+    console.log(addressObject.cy);
+    console.log(page);*/
+
+    /*response.writeHead(200, {'Content-Type': 'text/html'});
+    response.write("2");
+    response.end();*/
+    response.render('mainPage',{ addressObject:addressObject });
 }
-
 //---
-exports.create = create ;
+exports.create = create;
