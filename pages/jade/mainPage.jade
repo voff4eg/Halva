@@ -1,4 +1,44 @@
 ﻿include includes/head
+    style
+        media="screen" * {
+            margin: 0;
+            padding: 0;
+        }
+        ul {
+            display: block;
+            list-style-type: disc;
+            -webkit-margin-before: 1em;
+            -webkit-margin-after: 1em;
+            -webkit-margin-start: 0px;
+            -webkit-margin-end: 0px;
+            -webkit-padding-start: 40px;
+        }
+        li {
+            list-style-position: inside;
+        }
+        .sidebar-view {
+            position: absolute;
+            width: 0;
+            top: 72px;
+            bottom: 30px;
+            right: 16px;
+            z-index: 200;
+        }
+        .sidebar-panel-view {
+            position: relative;
+            width: 332px;
+            min-height: 40px;
+            margin-left: -332px;
+            -webkit-box-shadow: 0 2px 3px 1px rgba(0,0,0,.2);
+            box-shadow: 0 2px 3px 1px rgba(0,0,0,.2);
+            background: #fff;
+        }
+
+    .sidebar-view
+        .sidebar-panel-view
+            ul
+                for address in addressObject
+                    li= address.name
     #map
     script.
         $(document).ready(function () {
